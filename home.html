@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown Menu dalam Kotak</title>
+    <style>
+        body {
+            margin-top: 100px;
+            margin-left: 150px;
+            margin-right: 150px;
+            padding-top: 0;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: black;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #D9D9D9;
+            display: flex;
+            align-items: center;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a,
+        .dropbtn {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: brown;
+            transition: all 0.5s ease;
+        }
+
+        li.dropdown {
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: aliceblue;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .menu-right {
+            margin-left: auto;
+        }
+
+        #content-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn">File</a>
+            <div class="dropdown-content">
+                <a href="#" onclick="loadContent();">Import Data</a>
+            </div>
+        </li>
+        <li><a href="#info">Info</a></li>
+        <li><a href="#" id="logout">Logout</a></li>
+        <li class="menu-right">
+            <img src="OIP-.png" alt="Icon" style="height: 40px; margin: 0 10px;">
+        </li>
+    </ul>
+
+    <div id="content-container"></div>
+
+    <script>
+        function loadContent() {
+            var container = document.getElementById('content-container');
+            fetch('menu.html')
+                .then(response => response.text())
+                .then(data => {
+                    // Inject the HTML content
+                    container.innerHTML = data;
+
+                    // Extract and execute any embedded script tags
+                    const scriptTags = container.querySelectorAll('script');
+                    scriptTags.forEach(scriptTag => {
+                        const script = document.createElement('script');
+                        if (scriptTag.src) {
+                            script.src = scriptTag.src;
+                        } else {
+                            script.text = scriptTag.textContent;
+                        }
+                        document.body.appendChild(script);
+                    });
+                })
+                .catch(error => console.error('Error loading content:', error));
+        }
+
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', function(event) {
+            event.preventDefault(); 
+            window.location.href = 'index.html'; 
+        });
+    </script>
+</body>
+</html>
